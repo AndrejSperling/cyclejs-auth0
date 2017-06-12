@@ -43,7 +43,7 @@ function AuthenticationWrapper(sources) {
     const {
         Child = () => { throw new Error("[Auth0Wrapper] missing child component") },
         auth0ShowParams = defaultAuth0ShowParams,
-        decorators = {}
+        decorators = {},
     } = sources.props.authWrapperParams;
 
     const tokens$ = auth0.tokens$;
@@ -51,16 +51,9 @@ function AuthenticationWrapper(sources) {
     const childSources = { ...sources, props: { ...sources.props, tokens$ }};
     const sinks = Child(childSources);
 
-    const showLoginRequest$ = tokens$
-        .filter(tokens => !tokens)
-        .mapTo({
-            action: "show",
-            params: auth0ShowParams
-        });
-
     return decorateSinks({
         ...sinks,
-        auth0: xs.merge(showLoginRequest$, sinks.auth0 || xs.empty())
+        auth0: xs.merge(sinks.auth0 || xs.empty())
     }, tokens$, decorators);
 }
 
