@@ -38,7 +38,7 @@ function decorateSinks(sinks, tokens$, decorators) {
             return !!tokens;
         }).map(function (tokens) {
             return sink.map(function (data) {
-                return decorate(data, tokens.idToken);
+                return decorate(data, tokens);
             });
         }).flatten();
     });
